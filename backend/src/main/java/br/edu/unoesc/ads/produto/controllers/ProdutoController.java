@@ -1,19 +1,25 @@
 package br.edu.unoesc.ads.produto.controllers;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import br.edu.unoesc.ads.produto.entities.Produto;
 import br.edu.unoesc.ads.produto.repositories.ProdutoRepository;
@@ -24,6 +30,13 @@ public class ProdutoController {
 	@Autowired
 	ProdutoRepository produtoRepository;
 
+	@InitBinder
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) 
+    throws ServletException {
+        // Converte objeto multipart para byte[]
+        binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
+    }
+	
 	@GetMapping("/produtos")
 	public String listarProdutos(Model model) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat();
@@ -46,7 +59,8 @@ public class ProdutoController {
 	}
 
 	@PostMapping("/processa_incluir_produto")
-	public String processaFormIncluirProduto(@Valid Produto produto, BindingResult resultado) {
+	public String processaFormIncluirProduto(@Valid Produto produto, 
+											 BindingResult resultado) throws IOException {
 		if (resultado.hasErrors()) {
 			return "form_produto";
 		}
@@ -64,7 +78,9 @@ public class ProdutoController {
 	}
 	
 	@PostMapping("/processa_alterar_produto/{id}")
-	public String processaFormAlterarProduto(@PathVariable("id") long id, @Valid Produto produto, BindingResult resultado, Model model) {
+	public String processaFormAlterarProduto(@PathVariable("id") long id, 
+											 @Valid Produto produto, 
+											 BindingResult resultado, Model model) {
 		if (resultado.hasErrors()) {
 			produto.setId(id);
 			return "form_produto";

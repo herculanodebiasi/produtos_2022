@@ -2,10 +2,13 @@ package br.edu.unoesc.ads.produto.entities;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.apache.tomcat.util.codec.binary.Base64;
 
 @Entity
 public class Produto {
@@ -17,6 +20,9 @@ public class Produto {
 	private BigDecimal quantidade;
 	private BigDecimal valor;
 	
+	@Column(name = "foto")
+	private byte[] foto;
+
 	public Produto() { }
 
 	public Produto(Long id, String nome, BigDecimal quantidade, BigDecimal valor) {
@@ -37,4 +43,8 @@ public class Produto {
 
 	public BigDecimal getValor() { return valor; }
 	public void setValor(BigDecimal valor) { this.valor = valor; }
+
+	public String getFotoBase64() { return Base64.encodeBase64String(this.getFoto()); }
+	public byte[] getFoto() { return foto; }
+	public void setFoto(byte[] foto) { this.foto = foto; }
 }

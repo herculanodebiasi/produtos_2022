@@ -13,7 +13,7 @@
 			<br>
 			<table class="table table-striped table-condensed">
 				<thead>
-					<th>NOME</th> <th>QUANTIDADE</th> <th>VALOR</th> <th>AÇÃO</th>
+					<th>NOME</th> <th>QUANTIDADE</th> <th>VALOR</th> <th>FOTO</th> <th>AÇÃO</th>
 				</thead>
 				<tbody>
 					<tr th:each="produto : ${produtos}">
@@ -21,6 +21,12 @@
 						<td th:text="${#numbers.formatDecimal(produto.quantidade, 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
 						<td th:text="${#numbers.formatCurrency(produto.valor)}"></td>
 						
+						<td>
+							<img th:if="*{produto.foto != null}" 
+								th:src="*{'data:image/png;base64,'+ produto.getFotoBase64()}" 
+								width="100" />
+						</td>
+												
 						<td>
 							<a th:href="@{/alterar_produto/{id}(id=${produto.id})}" class="btn btn-primary">Editar</a>
 							<a th:href="@{/excluir_produto/{id}(id=${produto.id})}" class="btn btn-danger">Excluir</a>

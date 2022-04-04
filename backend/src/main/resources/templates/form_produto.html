@@ -51,7 +51,7 @@
 				<h1 class="h5 text-center fw-bold mt-1 mb-3" th:text="${adicionar} ? 'Incluir Produto' : 'Alterar Produto'"></h1>
 				<hr>
 
-				<form id="cadastro" action="#" class="row gx-3 gy-0" th:object="${produto}" method="post"
+				<form id="cadastro" action="#" class="row gx-3 gy-0" th:object="${produto}" method="post" enctype="multipart/form-data"
 					th:action="${adicionar} ? @{/processa_incluir_produto} : @{/processa_alterar_produto/{id}(id=${produto.id})}" >
 					<div class="form-floating mb-3">
 						<input type="text" 
@@ -95,6 +95,13 @@
 						</div>
 					</div>
 				
+					<label for="idFoto">Selecione uma foto:</label>
+					  <input type="file" 
+					  id="idFoto"
+					  th:field="*{foto}"
+					  accept="image/*">
+					<br />
+								
 					<div  class="d-flex justify-content-center">
 						<input type="submit" 
 							class="p-3 px-5 w-auto btn btn-primary btn-lg m-auto" 
